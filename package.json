@@ -1,0 +1,34 @@
+{
+  "name": "advent-of-code",
+  "version": "2023.0.1",
+  "description": "Advent Of Code repo for Jake Kohl",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jakekohl/advent-of-code.git"
+  },
+  "keywords": [
+    "advent-of-code",
+    "learning",
+    "practice"
+  ],
+  "author": "Jake Kohl",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jakekohl/advent-of-code/issues"
+  },
+  "homepage": "https://github.com/jakekohl/advent-of-code#readme",
+  "dependencies": {
+    "console": "^0.7.2",
+    "fs": "^0.0.1-security",
+    "json": "^11.0.0",
+    "length": "^0.0.1",
+    "node-fetch": "^3.3.2",
+    "number": "^0.0.1",
+    "path": "^0.12.7"
+  }
+}
