@@ -8,41 +8,6 @@ const __dirname = path.dirname('.');
 
 // To Run, make sure to pass the --year and --day parameters
 
-
-// defined function for pull data from the Advent-of-Code website
-async function fetchData(year, day) {
-    try {
-        const response = await fetch(`https://adventofcode.com/${year}/day/${day}/input`, {
-            method: 'GET',
-            headers: {
-                'content-type': 'text/html',
-                'accept': 'text/html'
-            }
-        });
-        return response.json();
-        }
-    catch (error) {
-        console.error('Error fetching data:', error);
-    }
-};
-
-// Pull the data for the specific day of the Advent-of-Code website
-async function pullPrompt(year, day) {
-    try {
-        const response = await fetch(`https://adventofcode.com/${year}/day/${day}`, {
-            method: 'GET',
-            headers: {
-                'content-type': 'text/html',
-                'accept': 'text/html'
-            }
-        });
-        return response;
-        }
-    catch (error) {
-        console.error('Error fetching data:', error);
-    }
-};
-
 function initializeDirectory(year) {
     const yearCheck = Number.isInteger;
     const yearLength = year.length;
@@ -98,7 +63,7 @@ function initializeDay(dir, day) {
 const year = process.argv[2];
 const day = process.argv[3];
 if (!year | !day) {
-    console.error('You attempted to run app.js without passing either a year or a day. Please try again using the following command syntax: node app.js --year 2023 --day 1');
+    console.error('You attempted to run app.js without passing either a year or a day. Please try again using the following command syntax: node app year day (Example: node app 2023 14 would be Day 14 of 2023)');
     process.exit();
 };
 
@@ -110,7 +75,6 @@ try {
     process.exit();
 };
 
-console.log(aocDir);
 // Initialize the day file if it does not exist
 try {
     initializeDay(aocDir,day);
@@ -119,16 +83,5 @@ try {
     process.exit();
 };
 
-// Pull Prompt and data from the Advent of Code website
-try {
-   // const promptData = pullPrompt(year, day);
-    //console.log(promptData);
-} catch (error) {
-    console.log(error);
-};
-try {
-    const pullData = fetchData(year, day);
-    console.log(pullData);
-} catch (error) {
-    console.log(error);
-}
+console.log(`You are ready for Day ${day} of the Advent of Code ${year}!`);
+process.exit(0);
