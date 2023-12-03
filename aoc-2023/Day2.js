@@ -195,3 +195,58 @@ for (let i = 0; i < values.length; i++) {
 const sumOfGameIDs = filteredList.reduce((a, b) => a+b, 0);
 
 console.log(`Sum of the Game IDs of valid games is ${sumOfGameIDs}.`);
+
+
+
+// As you continue your walk, the Elf poses a second question: in each game you played, what is the fewest number of cubes of each color that could have been in the bag to make the game possible?
+// The power of a set of cubes is equal to the numbers of red, green, and blue cubes multiplied together. The power of the minimum set of cubes in game 1 is 48. In games 2-5 it was 12, 1560, 630, and 36, respectively. Adding up these five powers produces the sum 2286.
+// For each game, find the minimum set of cubes that must have been present. What is the sum of the power of these sets?
+
+let powerList = [];
+
+// first split the the game number from the round results
+for (let i = 0; i < values.length; i++) {
+    const gameResults = values[i];
+    const game = gameResults.toString().split(":");
+    let greenCount = 0;
+    let redCount = 0;
+    let blueCount = 0;
+
+    // second, split the round results into arrays of 3
+    for (let g = 1; g < game.length; g++) {
+        const val = game[g].split(";");
+        
+        // third, split the various colors in each round
+        for (let v = 0; v < val.length; v++) {
+            const colors = val[v].split(",");
+
+            // fourth, split each individual color count up and evaluate the number of instances
+            for (let c = 0; c < colors.length; c++) {
+                const instance = colors[c].split(" ");
+                if (instance[2] == "green") {
+                    if (greenCount < +instance[1]) {
+                        greenCount = +instance[1]; 
+                    };
+                }
+                else if (instance[2] == "red") {
+                    if (redCount < +instance[1]) {
+                        redCount = +instance[1]; 
+                    };
+                }
+                else {
+                    if (blueCount < +instance[1]) {
+                        blueCount = +instance[1]; 
+                    };
+                };   
+            };
+        };
+        
+    };
+    let power = greenCount * redCount * blueCount;
+    powerList.push(power);
+};
+
+// Finally, add all of the ids in the filtered list together to get the sum
+const totalPower = powerList.reduce((a, b) => a+b, 0);
+
+console.log(`The total power of all games was ${totalPower}.`);

@@ -1014,7 +1014,18 @@ for (let i = 0; i < values.length;i++) {
     const resultString = first.concat(last);
     const result = Number.parseInt(resultString);
     filteredList.push(result);
-}
+};
 const calibratedValues = filteredList.reduce((a, b) => a + b, 0);
 
 console.log(`Sum of Calibrated Values is ${calibratedValues}`);
+
+
+// Your calculation isn't quite right. It looks like some of the digits are actually spelled out with letters: one, two, three, four, five, six, seven, eight, and nine also count as valid "digits". Equipped with this new information, you now need to find the real first and last digit on each line.
+
+const filteredList2 = [];
+for (let i = 0; i < values.length;i++) {
+    const value = values[i];
+    const line = value.toString().split("");
+    const newLine = line.filter(item => item.match(/^[0-9]+$/) != null);
+    
+};
