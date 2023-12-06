@@ -19,6 +19,7 @@ In this schematic, two numbers are not part numbers because they are not adjacen
 
 Of course, the actual engine schematic is much larger. What is the sum of all of the part numbers in the engine schematic? */
 let schematicInput = '';
+let answer = null;
 if (process.argv[2] == 'sample') {
     schematicInput = `467..114..
     ...*......
@@ -30,6 +31,7 @@ if (process.argv[2] == 'sample') {
     ......755.
     ...$.*....
     .664.598..`;
+    answer = 4361;
 }
 else {
     schematicInput = `..224.....487...................718.....................378............................................284........310......313..........311.
@@ -339,7 +341,7 @@ for (let a = 0; a < schArray.length; a++) {
                     let neighborsEval = potentialNeighbors["neighbors"];
                     let neighborProperty = neighborsEval["topLeft"];
                     let typeEval = null;
-                    try {
+                    if (starCheck !==true) { try {
                         typeEval = neighborProperty["typeOf"];
                     } catch {
                         typeEval = null;
@@ -349,7 +351,7 @@ for (let a = 0; a < schArray.length; a++) {
                     };
 
                     neighborProperty = neighborsEval["top"];
-                    try {
+                    if (starCheck !==true) { try {
                         typeEval = neighborProperty["typeOf"];
                     } catch {
                         typeEval = null;
@@ -359,7 +361,7 @@ for (let a = 0; a < schArray.length; a++) {
                     };
 
                     neighborProperty = neighborsEval["topRight"];
-                    try {
+                    if (starCheck !==true) { try {
                         typeEval = neighborProperty["typeOf"];
                     } catch {
                         typeEval = null;
@@ -369,7 +371,7 @@ for (let a = 0; a < schArray.length; a++) {
                     };
 
                     neighborProperty = neighborsEval["left"];
-                    try {
+                    if (starCheck !==true) { try {
                         typeEval = neighborProperty["typeOf"];
                     } catch {
                         typeEval = null;
@@ -379,7 +381,7 @@ for (let a = 0; a < schArray.length; a++) {
                     };
 
                     neighborProperty = neighborsEval["right"];
-                    try {
+                    if (starCheck !==true) { try {
                         typeEval = neighborProperty["typeOf"];
                     } catch {
                         typeEval = null;
@@ -388,7 +390,7 @@ for (let a = 0; a < schArray.length; a++) {
                         isValid = true;
                     };
                     neighborProperty = neighborsEval["bottomLeft"];
-                    try {
+                    if (starCheck !==true) { try {
                         typeEval = neighborProperty["typeOf"];
                     } catch {
                         typeEval = null;
@@ -397,7 +399,7 @@ for (let a = 0; a < schArray.length; a++) {
                         isValid = true;
                     };
                     neighborProperty = neighborsEval["bottom"];
-                    try {
+                    if (starCheck !==true) { try {
                         typeEval = neighborProperty["typeOf"];
                     } catch {
                         typeEval = null;
@@ -406,7 +408,7 @@ for (let a = 0; a < schArray.length; a++) {
                         isValid = true;
                     };
                     neighborProperty = neighborsEval["bottomRight"];
-                    try {
+                    if (starCheck !==true) { try {
                         typeEval = neighborProperty["typeOf"];
                     } catch {
                         typeEval = null;
@@ -434,6 +436,9 @@ console.log(sumArray);
 const sumOfPartNumbers = sumArray.reduce((a, b) => a + b, 0);
 
 console.log(`Sum of Part Numbers is ${sumOfPartNumbers}`);
+if (answer !== null) {
+    console.log(`Example answer is ${answer} .`);
+};
 
 
 
@@ -461,50 +466,132 @@ Consider the same engine schematic again:
 ......755.
 ...$.*....
 .664.598..
+
 In this schematic, there are two gears. The first is in the top left; it has part numbers 467 and 35, so its gear ratio is 16345. The second gear is in the lower right; its gear ratio is 451490. (The * adjacent to 617 is not a gear because it is only adjacent to one part number.) Adding up all of the gear ratios produces 467835.
 
 What is the sum of all of the gear ratios in your engine schematic?
 */
 
-
+if (process.argv[2] == 'sample') {
+    answer = 467835;
+};
+let starNodesArray = [];
 let arrayOfRatios = [];
-for (let r = 0; r < schArray.length; r++) {
-    // Find * characters and determine if they are adjacent to two part numbers
-    let rowVals = schArray[r];
-    let asterikArray = [];
-    let valueIndex = 0;
-    let preValIndex = 0;
-    asterikArray = rowVals.match(/\*/g);
-    
-    if (asterikArray !== null) {
-        for(let ac = 0; ac < asterikArray.length; ac++) {
-            let intCount = 0;
-            let gearPartNumbers = [];
-            let star = schDict[r * schArray.length + rowVals.indexOf('*',valueIndex)];
-            valueIndex = +(star["index"])+1;
-            let starNeighbors = star["neighbors"];
-            let intEval = Object.keys(starNeighbors);
-            intEval.forEach(function(starDirect) {
-                let neighEval = starNeighbors[starDirect];
-                if (starDirect !== undefined) {
-                    if (neighEval['typeOf'] == 'int') {
-                        intCount++;
-                        let findPartNumber = schArray[neighEval["row"]];
-                        let getPartNumbers = findPartNumber.match(/\d+/g); 
-                        let neighEvalVal = neighEval["value"];
-                        let regex = `/${neighEvalVal}/g`
-                        let numbersInclude = getPartNumbers.filter((members) => members.match(regex));
-                        gearPartNumbers.push(neighEval["value"]);
-                    };
-                };
-                if (intCount > 2) {
-                    ac = asterikArray.length;
-                };
-            });
-            if (intCount == 2 && gearPartNumbers.length == 2) {
-                let gearRatioVal = gearPartNumbers[0] * gearPartNumbers[1];
-                arrayOfRatios.push(gearRatioVal);
-            }
+for (let a = 0; a < sumArray.length; a++) {
+    let partTwoRowEvalString = schArray[a];
+    let partEval = sumArray[a];
+    let regex = `/${partEval}/g`;
+    let partNodeDetail = partTwoRowEvalString.indexOf(partEval);
+    let partNeighbors = schDict[partNodeDetail + (a * rowLength)];
+    if (partNeighbors !== undefined) {
+        let lookAt = partNeighbors["neighbors"];
+        let foundStar = false;
+        let starCheck;
+        let lookAtANeighbor = lookAt["topLeft"];
+        if (starCheck !==true) {
+            try {
+                starCheck = lookAt["value"];
+            } catch {
+                starCheck = null;
+            };
+            if (starCheck == "*") {
+                foundStar = true;
+                let starRow = lookAt["row"];
+                let starIndex = lookAt["index"];
+                let starStorage = schDict[(starRow * partTwoRowEvalString) + starIndex];
+                starArrayNodes.push(starStorage);
+            };
+        };
+        if (starCheck !== true) { lookAtANeighbor = lookAt["top"];
+        if (starCheck !==true) { try {
+            starCheck = lookAt["value"];
+        } catch {
+            starCheck = null;
+        };
+        if (starCheck == "*") {
+            foundStar = true;
+            let starRow = lookAt["row"];
+            let starIndex = lookAt["index"];
+            let starStorage = schDict[(starRow * partTwoRowEvalString) + starIndex];
+            starArrayNodes.push(starStorage);
+        };
+        if (starCheck !== true) { lookAtANeighbor = lookAt["topRight"];
+        if (starCheck !==true) { try {
+            starCheck = lookAt["value"];
+        } catch {
+            starCheck = null;
+        };
+        if (starCheck == "*") {
+            foundStar = true;
+            let starRow = lookAt["row"];
+            let starIndex = lookAt["index"];
+            let starStorage = schDict[(starRow * partTwoRowEvalString) + starIndex];
+            starArrayNodes.push(starStorage);
+        };
+        if (starCheck !== true) { lookAtANeighbor = lookAt["left"];
+        if (starCheck !==true) { try {
+            starCheck = lookAt["value"];
+        } catch {
+            starCheck = null;
+        };
+        if (starCheck == "*") {
+            foundStar = true;
+            let starRow = lookAt["row"];
+            let starIndex = lookAt["index"];
+            let starStorage = schDict[(starRow * partTwoRowEvalString) + starIndex];
+            starArrayNodes.push(starStorage);
+        };
+        if (starCheck !== true) { lookAtANeighbor = lookAt["right"];
+        if (starCheck !==true) { try {
+            starCheck = lookAt["value"];
+        } catch {
+            starCheck = null;
+        };
+        if (starCheck == "*") {
+            foundStar = true;
+            let starRow = lookAt["row"];
+            let starIndex = lookAt["index"];
+            let starStorage = schDict[(starRow * partTwoRowEvalString) + starIndex];
+            starArrayNodes.push(starStorage);
+        };
+        if (starCheck !== true) { lookAtANeighbor = lookAt["bottomLeft"];
+        if (starCheck !==true) { try {
+            starCheck = lookAt["value"];
+        } catch {
+            starCheck = null;
+        };
+        if (starCheck == "*") {
+            foundStar = true;
+            let starRow = lookAt["row"];
+            let starIndex = lookAt["index"];
+            let starStorage = schDict[(starRow * partTwoRowEvalString) + starIndex];
+            starArrayNodes.push(starStorage);
+        };
+        if (starCheck !== true) { lookAtANeighbor = lookAt["bottom"];
+        if (starCheck !==true) { try {
+            starCheck = lookAt["value"];
+        } catch {
+            starCheck = null;
+        };
+        if (starCheck == "*") {
+            foundStar = true;
+            let starRow = lookAt["row"];
+            let starIndex = lookAt["index"];
+            let starStorage = schDict[(starRow * partTwoRowEvalString) + starIndex];
+            starArrayNodes.push(starStorage);
+        };
+        if (starCheck !== true) { lookAtANeighbor = lookAt["bottomRight"];
+        if (starCheck !==true) { try {
+            starCheck = lookAt["value"];
+        } catch {
+            starCheck = null;
+        };
+        if (starCheck == "*") {
+            foundStar = true;
+            let starRow = lookAt["row"];
+            let starIndex = lookAt["index"];
+            let starStorage = schDict[(starRow * partTwoRowEvalString) + starIndex];
+            starArrayNodes.push(starStorage);
         };
     };
 };
@@ -514,3 +601,6 @@ console.log(arrayOfRatios);
 const sumOfRatios = arrayOfRatios.reduce((a, b) => a + b, 0);
 
 console.log(`Sum of all gear ratios is ${sumOfRatios}`);
+if (answer !== null) {
+    console.log(`Example answer is ${answer} .`);
+};
