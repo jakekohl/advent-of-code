@@ -19,18 +19,7 @@ In this schematic, two numbers are not part numbers because they are not adjacen
 
 Of course, the actual engine schematic is much larger. What is the sum of all of the part numbers in the engine schematic? */
 
-const schematicInput = `467..114..
-...*......
-..35..633.
-......#...
-617*......
-.....+.58.
-..592.....
-......755.
-...$.*....
-.664.598..`
-
-/*`..224.....487...................718.....................378............................................284........310......313..........311.
+const schematicInput = `..224.....487...................718.....................378............................................284........310......313..........311.
 ....*..............................*744....486*485......*......741......@...359.#666...439................*925....*......$..+........@......
 .235................758..440...........................251....*......262.....*..........*......................752......774.......515.......
 .........705%..@746........+..942*591.347.470...#..257.........637...........793.......299..../.....813....509......464......&.........688..
@@ -169,13 +158,15 @@ const schematicInput = `467..114..
 ..................240............175..........808..............225..........988............/604..............232.448..*..651......769.......
 .........569*....*........975*.....*....968..............585.....*................26.................................394....@.142...........
 ......*......498..969.........360.666...%.........................919.......360........-.*.........%...................................484..
-...407................886...................................84......................933...101....58........839..425.........................`; */
+...407................886...................................84......................933...101....58........839..425.........................`;
 
 // init
 const schArray = schematicInput.split("\n");
+let rowLength = schArray[0].length;
 let schDict = {};
 let flatIndex = 0;
 let sumArray = [];
+let neighborArrayDef = ['top','bottom','level'];
 
 // First, evaluate each character in each row within the initial array to see if it's a Number, a Symbol, or a Period (.), then create a dictionary and push it into the schDArray[];
 for (let r = 0; r < schArray.length; r++) {
@@ -221,40 +212,116 @@ for (let r = 0; r < schArray.length; r++) {
 };
 
 // Second - Parse through the schDArray[] and add adjacent values to any integer dictionary
-for (let i = 0; i < 19600; i++) {
+for (let i = 0; i < Object.keys(schDict).length; i++) {
     let neighbors =  {};
     let dObj = schDict[i];
     let typeOfVal = dObj["typeOf"];
 
     if (typeOfVal == 'int' || typeOfVal == 'symbol') {
-        neighbors = {topLeft: schDict[i-141], top: schDict[i-140], topRight: schDict[i-139], left: schDict[i-1], right: schDict[i+1], bottomLeft: schDict[i+139], bottom: schDict[i+140], bottomRight: schDict[i+141]};
-        dObj["neighbors"] = neighbors;
-        schDict[i] = dObj;
+        for(let d = 0; d < neighborArrayDef.length; d++) {
+            let direction = neighborArrayDef[d];
+            let dirVal;
+            if (direction.match(/^top/)) {
+                dirVal = i-rowLength;
+                let topRow = schDict[dirVal];
+                if (topRow !== undefined){
+                    if (topRow["index"]-1 < 0) {
+                        neighbors["topLeft"] = null;
+                    }
+                    else {
+                        neighbors["topLeft"] = schDict[dirVal-1];
+                    };
+                    if (topRow["index"] !== dObj["index"]) {
+                        neighbors["top"] = null;
+                    }
+                    else {
+                        neighbors["top"] = schDict[dirVal];
+                    };
+                    if (topRow["index"]+1 >= rowLength) {
+                        neighbors["topRight"] = null;
+                    }
+                    else {
+                        neighbors["topRight"] = schDict[dirVal+1];
+                    };
+                }
+                else {
+                    neighbors["topLeft"] = null;
+                    neighbors["top"] = null;
+                    neighbors["topRight"] = null;
+                };
+            }
+            else if (direction.match(/^bottom/)) {
+                dirVal = i+rowLength;
+                let bottomRow = schDict[dirVal];
+                if (bottomRow !== undefined) {
+                    if (bottomRow["index"]-1 < 0) {
+                        neighbors["bottomLeft"] = null;
+                    }
+                    else {
+                        neighbors["bottomLeft"] = schDict[dirVal-1];
+                    };
+                    if (bottomRow["index"] == undefined) {
+                        neighbors["bottom"] = null;
+                    }
+                    else {
+                        neighbors["bottom"] = schDict[dirVal];
+                    };
+                    if (bottomRow["index"]+1 >= rowLength) {
+                        neighbors["bottomRight"] = null;
+                    }
+                    else {
+                        neighbors["bottomRight"] = schDict[dirVal+1];
+                    };
+                }
+                else {
+                    neighbors["bottomLeft"] = null;
+                    neighbors["bottom"] = null;
+                    neighbors["bottomRight"] = null;
+                };
+            }
+            else {
+                dirVal = i;
+                if (dObj["index"]-1 < 0) {
+                    neighbors["left"] = null;
+                }
+                else {
+                    neighbors["left"] = schDict[dirVal-1];
+                };
+                if (dObj["index"]+1 >= rowLength) {
+                    neighbors["right"] = null;
+                }
+                else {
+                    neighbors["right"] = schDict[dirVal+1];
+                };
+            };
+        };
     };
+    dObj["neighbors"] = neighbors;
+    schDict[i] = dObj;
 };
 
 // Third, find all numbers of any length and define the row and index values of the characters
 for (let a = 0; a < schArray.length; a++) {
     let rowString = schArray[a];
-    let numberArray = rowString.match(/-?\d(?:[,\d]*\.\d+|[,\d]*)/g); // Get Full numbers
-    if (numberArray.length != 0) {
+    let numberArray= [];
+    let valueIndex = 0;
+    let preValIndex = 0;
+    numberArray = rowString.match(/\d+/g); // Get Full numbers
+
+    if (!(numberArray == null)) {
         let isPartNumber = false;
         for (let na = 0; na < numberArray.length; na++) {
             let numberValue = numberArray[na].split(""); // Break numbers into single digits and evaluate neighbors
-            let valueIndex = 0;
-            let preValIndex = 0;
             for (let v = 0; v < numberValue.length; v++) {
+                let isValid = false;
                 valueIndex = rowString.indexOf(numberValue[v],preValIndex);
-                preValIndex = valueIndex;
                 let indexDict = (a * schArray.length) + valueIndex;
                 let potentialNeighbors = schDict[indexDict];
                 let doesItHaveNeighbors = "neighbors" in potentialNeighbors;
                 if (doesItHaveNeighbors) {
                     let neighborsEval = potentialNeighbors["neighbors"];
-                    let isValid = false;
                     let neighborProperty = neighborsEval["topLeft"];
                     let typeEval = null;
-
                     try {
                         typeEval = neighborProperty["typeOf"];
                     } catch {
@@ -303,7 +370,6 @@ for (let a = 0; a < schArray.length; a++) {
                     if (typeEval == "symbol") {
                         isValid = true;
                     };
-
                     neighborProperty = neighborsEval["bottomLeft"];
                     try {
                         typeEval = neighborProperty["typeOf"];
@@ -313,7 +379,6 @@ for (let a = 0; a < schArray.length; a++) {
                     if (typeEval == "symbol") {
                         isValid = true;
                     };
-
                     neighborProperty = neighborsEval["bottom"];
                     try {
                         typeEval = neighborProperty["typeOf"];
@@ -323,7 +388,6 @@ for (let a = 0; a < schArray.length; a++) {
                     if (typeEval == "symbol") {
                         isValid = true;
                     };
-
                     neighborProperty = neighborsEval["bottomRight"];
                     try {
                         typeEval = neighborProperty["typeOf"];
@@ -333,25 +397,23 @@ for (let a = 0; a < schArray.length; a++) {
                     if (typeEval == "symbol") {
                         isValid = true;
                     };
-                    if (isValid) {
-                        isPartNumber = true;
-                        v = numberValue.length;
-                    };
-                    // Reset 
-                    isValid = false;
-                };   
-                if (isPartNumber) {
+                };
+                if (isValid) {
                     sumArray.push(+numberArray[na]);
-                    // Reset
-                    isPartNumber = false;
+                    isValid = false;
+                    preValIndex = valueIndex + (numberValue.length - v);
+                    v = numberValue.length;
+                }
+                else {
+                    preValIndex = valueIndex + 1;
                 };
             };
         };
     };
 };
-console.log(sumArray)
+console.log(sumArray);
 
 // Sum
 const sumOfPartNumbers = sumArray.reduce((a, b) => a + b, 0);
 
-console.log(`Sum of Part Numbers is ${sumOfPartNumbers} .`);
+console.log(`Sum of Part Numbers is ${sumOfPartNumbers}`);
