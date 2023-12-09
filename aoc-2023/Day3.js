@@ -622,15 +622,21 @@ for (let b = 0; b < starNodesArray.length; b++) {
             let numbersToRatio = starNumbers.filter((value, index) => starNumbers.indexOf(value) === index);
             if (numbersToRatio.length == 2) {
                 let ratioValue = numbersToRatio[0] * numbersToRatio[1];
-                arrayRatios.push(numbersToRatio[0], numbersToRatio[1],ratioValue);
+                arrayRatios.push([numbersToRatio[0], numbersToRatio[1],ratioValue]);
             };
         } ;
     };
 };
+
+let ratiosToSum = [];
 for (let a = 0; a < arrayRatios.length; a++) {
     console.log(arrayRatios[a]);
+    let ratioFormula = arrayRatios[a];
+    let ratioValue = ratioFormula[2];
+    ratiosToSum.push(ratioValue);
 }
-const sumOfRatios = arrayRatios.reduce((a, b) => a + b, 0);
+
+const sumOfRatios = ratiosToSum.reduce((a, b) => a + b, 0);
 
 console.log(`Sum of all gear ratios is ${sumOfRatios}`);
 if (answer !== null) {
