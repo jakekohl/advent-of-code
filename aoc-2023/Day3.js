@@ -22,15 +22,15 @@ let schematicInput = '';
 let answer = null;
 if (process.argv[2] == 'sample') {
     schematicInput = `467..114..
-    ...*......
-    ..35..633.
-    ......#...
-    617*......
-    .....+.58.
-    ..592.....
-    ......755.
-    ...$.*....
-    .664.598..`;
+...*......
+..35..633.
+......#...
+617*......
+.....+.58.
+..592.....
+......755.
+...$.*....
+.664.598..`;
     answer = 4361;
 }
 else {
@@ -185,6 +185,7 @@ let rowLength = schArray[0].length;
 let schDict = {};
 let flatIndex = 0;
 let sumArray = [];
+let partNumberAndIndexArray = [];
 let neighborArrayDef = ['top','bottom','level'];
 
 // First, evaluate each character in each row within the initial array to see if it's a Number, a Symbol, or a Period (.), then create a dictionary and push it into the schDArray[];
@@ -341,84 +342,96 @@ for (let a = 0; a < schArray.length; a++) {
                     let neighborsEval = potentialNeighbors["neighbors"];
                     let neighborProperty = neighborsEval["topLeft"];
                     let typeEval = null;
-                    if (starCheck !==true) { try {
-                        typeEval = neighborProperty["typeOf"];
-                    } catch {
-                        typeEval = null;
+                    if (isValid !==true) { 
+                        try {
+                            typeEval = neighborProperty["typeOf"];
+                        } catch {
+                            typeEval = null;
+                        };
+                        if (typeEval == "symbol") {
+                            isValid = true;
+                        };
                     };
-                    if (typeEval == "symbol") {
-                        isValid = true;
-                    };
-
                     neighborProperty = neighborsEval["top"];
-                    if (starCheck !==true) { try {
-                        typeEval = neighborProperty["typeOf"];
-                    } catch {
-                        typeEval = null;
+                    if (isValid !==true) { 
+                        try {
+                            typeEval = neighborProperty["typeOf"];
+                        } catch {
+                            typeEval = null;
+                        };
+                        if (typeEval == "symbol") {
+                            isValid = true;
+                        };
                     };
-                    if (typeEval == "symbol") {
-                        isValid = true;
-                    };
-
                     neighborProperty = neighborsEval["topRight"];
-                    if (starCheck !==true) { try {
-                        typeEval = neighborProperty["typeOf"];
-                    } catch {
-                        typeEval = null;
+                    if (isValid !==true) { 
+                        try {
+                            typeEval = neighborProperty["typeOf"];
+                        } catch {
+                            typeEval = null;
+                        };
+                        if (typeEval == "symbol") {
+                            isValid = true;
+                        };
                     };
-                    if (typeEval == "symbol") {
-                        isValid = true;
-                    };
-
                     neighborProperty = neighborsEval["left"];
-                    if (starCheck !==true) { try {
-                        typeEval = neighborProperty["typeOf"];
-                    } catch {
-                        typeEval = null;
+                    if (isValid !==true) { 
+                        try {
+                            typeEval = neighborProperty["typeOf"];
+                        } catch {
+                            typeEval = null;
+                        };
+                        if (typeEval == "symbol") {
+                            isValid = true;
+                        };
                     };
-                    if (typeEval == "symbol") {
-                        isValid = true;
-                    };
-
                     neighborProperty = neighborsEval["right"];
-                    if (starCheck !==true) { try {
-                        typeEval = neighborProperty["typeOf"];
-                    } catch {
-                        typeEval = null;
-                    };
-                    if (typeEval == "symbol") {
-                        isValid = true;
+                    if (isValid !==true) { 
+                        try {
+                            typeEval = neighborProperty["typeOf"];
+                        } catch {
+                            typeEval = null;
+                        };
+                        if (typeEval == "symbol") {
+                            isValid = true;
+                        };
                     };
                     neighborProperty = neighborsEval["bottomLeft"];
-                    if (starCheck !==true) { try {
-                        typeEval = neighborProperty["typeOf"];
-                    } catch {
-                        typeEval = null;
-                    };
-                    if (typeEval == "symbol") {
-                        isValid = true;
+                    if (isValid !==true) {
+                        try {
+                            typeEval = neighborProperty["typeOf"];
+                        } catch {
+                            typeEval = null;
+                        };
+                        if (typeEval == "symbol") {
+                            isValid = true;
+                        };
                     };
                     neighborProperty = neighborsEval["bottom"];
-                    if (starCheck !==true) { try {
-                        typeEval = neighborProperty["typeOf"];
-                    } catch {
-                        typeEval = null;
-                    };
-                    if (typeEval == "symbol") {
-                        isValid = true;
+                    if (isValid !==true) {
+                        try {
+                            typeEval = neighborProperty["typeOf"];
+                        } catch {
+                            typeEval = null;
+                        };
+                        if (typeEval == "symbol") {
+                            isValid = true;
+                        };
                     };
                     neighborProperty = neighborsEval["bottomRight"];
-                    if (starCheck !==true) { try {
-                        typeEval = neighborProperty["typeOf"];
-                    } catch {
-                        typeEval = null;
-                    };
-                    if (typeEval == "symbol") {
-                        isValid = true;
-                    };
+                    if (isValid !==true) {
+                        try {
+                            typeEval = neighborProperty["typeOf"];
+                        } catch {
+                            typeEval = null;
+                        };
+                        if (typeEval == "symbol") {
+                            isValid = true;
+                        };
                 };
                 if (isValid) {
-                    sumArray.push(+numberArray[na]);
+                    let zeroIndex = rowString.indexOf(numberValue[0],preValIndex-v);
+                    partNumberAndIndexArray.push([(+numberArray[na]), zeroIndex, a, numberArray[na].length]);
                     isValid = false;
                     preValIndex = valueIndex + (numberValue.length - v);
                     v = numberValue.length;
@@ -427,12 +440,16 @@ for (let a = 0; a < schArray.length; a++) {
                     preValIndex = valueIndex + 1;
                 };
             };
+            };
         };
     };
 };
-console.log(sumArray);
 
 // Sum
+for (let it = 0 ; it < partNumberAndIndexArray.length; it++) {
+    let pNIarray = partNumberAndIndexArray[it];
+    sumArray.push(pNIarray[0]);
+};
 const sumOfPartNumbers = sumArray.reduce((a, b) => a + b, 0);
 
 console.log(`Sum of Part Numbers is ${sumOfPartNumbers}`);
@@ -475,123 +492,296 @@ What is the sum of all of the gear ratios in your engine schematic?
 if (process.argv[2] == 'sample') {
     answer = 467835;
 };
+
+let partNumbersWithStarNeighbors = [];
+let starNodesArray = [];
+let intNodesArray = [];
+let arrayRatios = [];
+
+// find part numbers that have a neighbor whose value is "*" and push them into a mew array
+for (let a = 0; a < partNumberAndIndexArray.length; a++) { 
+    let partEval = partNumberAndIndexArray[a];
+    let rowTracker = 0;
+    let indexTracker = 0;
+    for (let pa = 0; pa < schArray.length; pa == rowTracker) {
+        let partTwoRowEvalString = schArray[pa];
+        let partNodeDetail = partEval[1];
+        if ([partNodeDetail !== indexTracker]) {
+            indexTracker = partNodeDetail;
+            rowTracker = pa;
+        };
+        let partTwoRowEvalStringSliced = "";
+        if (indexTracker == 0) {
+            partTwoRowEvalStringSliced = partTwoRowEvalString.slice(indexTracker, indexTracker+partEval[3]+1);
+        } else {
+            partTwoRowEvalStringSliced = partTwoRowEvalString.slice(indexTracker-1, indexTracker+partEval[3]+1);
+        };
+        if ((partTwoRowEvalStringSliced.indexOf("*") !== -1) && (partEval[2] == pa || partEval[2] == pa-1 || partEval[2] == pa+1)) {
+            partNumbersWithStarNeighbors.push(partEval);
+            pa = schArray.length;
+        };
+        pa++;
+    };
+};
+
+for (let a = 0; a < Object.keys(schDict).length; a++) {
+    let node = schDict[a];
+    let nodeVal = node["value"];
+    if (nodeVal == "*") {
+        starNodesArray.push(node);
+    };
+};
+for (let b = 0; b < starNodesArray.length; b++) {
+    let starEval = starNodesArray[b];
+    let starNeighbors = starEval["neighbors"];
+    let neighIndex;
+    let neighRow;
+    let starNumbers = [];
+    intNodesArray = [];
+    let starDir = starNeighbors["topLeft"];
+    if (starDir !== undefined) {
+        if (starDir["typeOf"] == "int") {
+            neighIndex = starDir["index"];
+            neighRow = starDir["row"];
+            intNodesArray.push([starDir["value"],neighRow,neighIndex]);
+        };
+    };
+    starDir = starNeighbors["top"];
+    if (starDir !== undefined) {
+        if (starDir["typeOf"] == "int") {
+            neighIndex = starDir["index"];
+            neighRow = starDir["row"];
+            intNodesArray.push([starDir["value"],neighRow,neighIndex]);
+        };
+    };
+    starDir = starNeighbors["topRight"];
+    if (starDir !== undefined) {
+        if (starDir["typeOf"] == "int") {
+            neighIndex = starDir["index"];
+            neighRow = starDir["row"];
+            intNodesArray.push([starDir["value"],neighRow,neighIndex]);
+        };
+    };
+    starDir = starNeighbors["left"];
+    if (starDir !== undefined) {
+        if (starDir["typeOf"] == "int") {
+            neighIndex = starDir["index"];
+            neighRow = starDir["row"];
+            intNodesArray.push([starDir["value"],neighRow,neighIndex]);
+        };
+    };
+    starDir = starNeighbors["right"];
+    if (starDir !== undefined) {
+        if (starDir["typeOf"] == "int") {
+            neighIndex = starDir["index"];
+            neighRow = starDir["row"];
+            intNodesArray.push([starDir["value"],neighRow,neighIndex]);
+        };
+    };
+    starDir = starNeighbors["bottomLeft"];
+    if (starDir !== undefined) {
+        if (starDir["typeOf"] == "int") {
+            neighIndex = starDir["index"];
+            neighRow = starDir["row"];
+            intNodesArray.push([starDir["value"],neighRow,neighIndex]);
+        };
+    };
+    starDir = starNeighbors["bottom"];
+    if (starDir !== undefined) {
+        if (starDir["typeOf"] == "int") {
+            neighIndex = starDir["index"];
+            neighRow = starDir["row"];
+            intNodesArray.push([starDir["value"],neighRow,neighIndex]);
+        };
+    };
+    starDir = starNeighbors["bottomright"];
+    if (starDir !== undefined) {
+        if (starDir["typeOf"] == "int") {
+            neighIndex = starDir["index"];
+            neighRow = starDir["row"];
+            intNodesArray.push([starDir["value"],neighRow,neighIndex]);
+        };
+    };
+    if (intNodesArray.length > 0) {
+        for (let d = 0; d < intNodesArray.length; d++) {
+            let intEval = intNodesArray[d];
+            let intEvalValue = intEval[0];
+            let intEvalRow = intEval[1];
+            let intEvalIndex = intEval[2];
+    
+            for (let e = 0; e < partNumbersWithStarNeighbors.length; e++) {
+                let partNumberToEval = partNumbersWithStarNeighbors[e];
+                let stringRow = schArray[intEvalRow];
+                if (stringRow.indexOf(intEvalValue,intEvalIndex) == intEvalIndex && partNumberToEval[2] == intEvalRow && partNumberToEval[1] == intEvalIndex ) {
+                    starNumbers.push(partNumberToEval[0]);
+                    e = partNumbersWithStarNeighbors.length;
+                };
+            };
+        };
+        if (starNumbers.length > 0) {
+            let numbersToRatio = starNumbers.filter((value, index) => starNumbers.indexOf(value) === index);
+            if (numbersToRatio.length == 2) {
+                let ratioValue = numbersToRatio[0] * numbersToRatio[1];
+                arrayRatios.push(numbersToRatio[0], numbersToRatio[1],ratioValue);
+            };
+        } ;
+    };
+};
+for (let a = 0; a < arrayRatios.length; a++) {
+    console.log(arrayRatios[a]);
+}
+const sumOfRatios = arrayRatios.reduce((a, b) => a + b, 0);
+
+console.log(`Sum of all gear ratios is ${sumOfRatios}`);
+if (answer !== null) {
+    console.log(`Example answer is ${answer} .`);
+};
+
+/*
+
 let starNodesArray = [];
 let arrayOfRatios = [];
-for (let a = 0; a < sumArray.length; a++) {
-    let partTwoRowEvalString = schArray[a];
-    let partEval = sumArray[a];
-    let regex = `/${partEval}/g`;
-    let partNodeDetail = partTwoRowEvalString.indexOf(partEval);
-    let partNeighbors = schDict[partNodeDetail + (a * rowLength)];
-    if (partNeighbors !== undefined) {
-        let lookAt = partNeighbors["neighbors"];
-        let foundStar = false;
-        let starCheck;
-        let lookAtANeighbor = lookAt["topLeft"];
-        if (starCheck !==true) {
-            try {
-                starCheck = lookAt["value"];
-            } catch {
-                starCheck = null;
+for (let a = 0; a < partNumberAndIndexArray.length; a++) {
+    let partEval = partNumberAndIndexArray[a];
+    let rowTracker = 0;
+    let indexTracker = 0;
+    for (let pa = 0; pa < schArray.length; pa == rowTracker) {
+        let partTwoRowEvalString = schArray[pa];
+        let partNodeDetail = partEval[1];
+        if ([partNodeDetail !== -1]) {
+            rowTracker = pa;
+            indexTracker = partNodeDetail + partEval.length;
+            let partLength = partEval[0].length;
+            let forLoop = partTwoRowEvalString.indexOf(partNumberAndIndexArray[1])[1];
+            for (let partNeighbors = schDict[partNodeDetail + (a * rowLength)]; partNeighbors < forLoop; partNeighbors++ ) {
+                let lookAt = partNeighbors["neighbors"];
+                let foundStar = false;
+                let starCheck;
+                let lookAtANeighbor;
+                if (foundStar !==true) {
+                    lookAtANeighbor = lookAt["topLeft"];
+                    try {
+                        starCheck = lookAt["value"];
+                    } catch {
+                        starCheck = null;
+                    };
+                    if (starCheck == "*") {
+                        foundStar = true;
+                        let starRow = lookAt["row"];
+                        let starIndex = lookAt["index"];
+                        let starStorage = schDict[(starRow * partTwoRowEvalString) + starIndex];
+                        starNodesArray.push(starStorage);
+                    };
+                };
+                if (foundStar !== true) { 
+                    lookAtANeighbor = lookAt["top"];
+                    try {
+                        starCheck = lookAt["value"];
+                    } catch {
+                        starCheck = null;
+                    };
+                    if (starCheck == "*") {
+                        foundStar = true;
+                        let starRow = lookAt["row"];
+                        let starIndex = lookAt["index"];
+                        let starStorage = schDict[(starRow * partTwoRowEvalString) + starIndex];
+                        starNodesArray.push(starStorage);
+                    };
+                };
+                if (foundStar !== true) { 
+                    lookAtANeighbor = lookAt["topRight"];
+                    try {
+                            starCheck = lookAt["value"];
+                        } catch {
+                            starCheck = null;
+                        };
+                        if (starCheck == "*") {
+                            foundStar = true;
+                            let starRow = lookAt["row"];
+                            let starIndex = lookAt["index"];
+                            let starStorage = schDict[(starRow * partTwoRowEvalString) + starIndex];
+                            starNodesArray.push(starStorage);
+                        };
+                    };
+                if (foundStar !== true) {
+                    lookAtANeighbor = lookAt["left"];
+                    try {
+                            starCheck = lookAt["value"];
+                    } catch {
+                        starCheck = null;
+                    };
+                    if (starCheck == "*") {
+                        foundStar = true;
+                        let starRow = lookAt["row"];
+                        let starIndex = lookAt["index"];
+                        let starStorage = schDict[(starRow * partTwoRowEvalString) + starIndex];
+                        starNodesArray.push(starStorage);
+                    };
+                };
+                if (foundStar !== true) {
+                    lookAtANeighbor = lookAt["right"];
+                try {
+                        starCheck = lookAt["value"];
+                    } catch {
+                        starCheck = null;
+                    };
+                    if (starCheck == "*") {
+                        foundStar = true;
+                        let starRow = lookAt["row"];
+                        let starIndex = lookAt["index"];
+                        let starStorage = schDict[(starRow * partTwoRowEvalString) + starIndex];
+                        starNodesArray.push(starStorage);
+                    };
+                };
+                if (foundStar !== true) {
+                    lookAtANeighbor = lookAt["bottomLeft"];
+                try {
+                        starCheck = lookAt["value"];
+                    } catch {
+                        starCheck = null;
+                    };
+                    if (starCheck == "*") {
+                        foundStar = true;
+                        let starRow = lookAt["row"];
+                        let starIndex = lookAt["index"];
+                        let starStorage = schDict[(starRow * partTwoRowEvalString) + starIndex];
+                        starNodesArray.push(starStorage);
+                    };
+                };
+                if (foundStar !== true) { 
+                    lookAtANeighbor = lookAt["bottom"];
+                    try {
+                            starCheck = lookAt["value"];
+                        } catch {
+                            starCheck = null;
+                        };
+                    if (starCheck == "*") {
+                        foundStar = true;
+                        let starRow = lookAt["row"];
+                        let starIndex = lookAt["index"];
+                        let starStorage = schDict[(starRow * partTwoRowEvalString) + starIndex];
+                        starNodesArray.push(starStorage);
+                    };
+                };
+                if (foundStar !== true) {
+                    lookAtANeighbor = lookAt["bottomRight"];
+                    try {
+                    starCheck = lookAt["value"];
+                    } catch {
+                        starCheck = null;
+                    };
+                    if (starCheck == "*") {
+                        foundStar = true;
+                        let starRow = lookAt["row"];
+                        let starIndex = lookAt["index"];
+                        let starStorage = schDict[(starRow * partTwoRowEvalString) + starIndex];
+                        starNodesArray.push(starStorage);
+                    };
+                };
+                if (foundStar == true) {
+                    partNeighbors = partTwoRowEvalString.indexOf(partNumberAndIndexArray[(partEval[0].length)-1])[1];
+                };
             };
-            if (starCheck == "*") {
-                foundStar = true;
-                let starRow = lookAt["row"];
-                let starIndex = lookAt["index"];
-                let starStorage = schDict[(starRow * partTwoRowEvalString) + starIndex];
-                starArrayNodes.push(starStorage);
-            };
-        };
-        if (starCheck !== true) { lookAtANeighbor = lookAt["top"];
-        if (starCheck !==true) { try {
-            starCheck = lookAt["value"];
-        } catch {
-            starCheck = null;
-        };
-        if (starCheck == "*") {
-            foundStar = true;
-            let starRow = lookAt["row"];
-            let starIndex = lookAt["index"];
-            let starStorage = schDict[(starRow * partTwoRowEvalString) + starIndex];
-            starArrayNodes.push(starStorage);
-        };
-        if (starCheck !== true) { lookAtANeighbor = lookAt["topRight"];
-        if (starCheck !==true) { try {
-            starCheck = lookAt["value"];
-        } catch {
-            starCheck = null;
-        };
-        if (starCheck == "*") {
-            foundStar = true;
-            let starRow = lookAt["row"];
-            let starIndex = lookAt["index"];
-            let starStorage = schDict[(starRow * partTwoRowEvalString) + starIndex];
-            starArrayNodes.push(starStorage);
-        };
-        if (starCheck !== true) { lookAtANeighbor = lookAt["left"];
-        if (starCheck !==true) { try {
-            starCheck = lookAt["value"];
-        } catch {
-            starCheck = null;
-        };
-        if (starCheck == "*") {
-            foundStar = true;
-            let starRow = lookAt["row"];
-            let starIndex = lookAt["index"];
-            let starStorage = schDict[(starRow * partTwoRowEvalString) + starIndex];
-            starArrayNodes.push(starStorage);
-        };
-        if (starCheck !== true) { lookAtANeighbor = lookAt["right"];
-        if (starCheck !==true) { try {
-            starCheck = lookAt["value"];
-        } catch {
-            starCheck = null;
-        };
-        if (starCheck == "*") {
-            foundStar = true;
-            let starRow = lookAt["row"];
-            let starIndex = lookAt["index"];
-            let starStorage = schDict[(starRow * partTwoRowEvalString) + starIndex];
-            starArrayNodes.push(starStorage);
-        };
-        if (starCheck !== true) { lookAtANeighbor = lookAt["bottomLeft"];
-        if (starCheck !==true) { try {
-            starCheck = lookAt["value"];
-        } catch {
-            starCheck = null;
-        };
-        if (starCheck == "*") {
-            foundStar = true;
-            let starRow = lookAt["row"];
-            let starIndex = lookAt["index"];
-            let starStorage = schDict[(starRow * partTwoRowEvalString) + starIndex];
-            starArrayNodes.push(starStorage);
-        };
-        if (starCheck !== true) { lookAtANeighbor = lookAt["bottom"];
-        if (starCheck !==true) { try {
-            starCheck = lookAt["value"];
-        } catch {
-            starCheck = null;
-        };
-        if (starCheck == "*") {
-            foundStar = true;
-            let starRow = lookAt["row"];
-            let starIndex = lookAt["index"];
-            let starStorage = schDict[(starRow * partTwoRowEvalString) + starIndex];
-            starArrayNodes.push(starStorage);
-        };
-        if (starCheck !== true) { lookAtANeighbor = lookAt["bottomRight"];
-        if (starCheck !==true) { try {
-            starCheck = lookAt["value"];
-        } catch {
-            starCheck = null;
-        };
-        if (starCheck == "*") {
-            foundStar = true;
-            let starRow = lookAt["row"];
-            let starIndex = lookAt["index"];
-            let starStorage = schDict[(starRow * partTwoRowEvalString) + starIndex];
-            starArrayNodes.push(starStorage);
         };
     };
 };
@@ -604,3 +794,4 @@ console.log(`Sum of all gear ratios is ${sumOfRatios}`);
 if (answer !== null) {
     console.log(`Example answer is ${answer} .`);
 };
+*/
