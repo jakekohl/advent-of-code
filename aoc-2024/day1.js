@@ -1003,25 +1003,62 @@ const inputArray = input.split('\n');
 let totalDistance = 0;
 let debug = 0;
 
-const l1 = [];
-const l2 = [];
-const l3 = [];
-const l4 = [];
-const l5 = [];
-const r1 = [];
-const r2 = [];
-const r3 = [];
-const r4 = [];
-const r5 = [];
+const c1 = {
+  left: [],
+  right: []
+}
+const c2 = {
+  left: [],
+  right: []
+}
+const c3 = {
+  left: [],
+  right: []
+}
+const c4 = {
+  left: [],
+  right:[]
+}
+const c5 = {
+  left: [],
+  right: []
+}
 
 inputArray.forEach((line) => {
-  const lineChars = line.split("").filter((val) => val !== (' '));
-  let count = 0;
-  lineChars.forEach((a) => {
-    if(lineChars.indexOf(a, count) < 5)
-      // TODO: Find simplest way to sort into column arrays
-  })
-})
+  const left = line.split("   ")[0].split("");
+  const right = line.split("   ")[1].split("");
+  c1.left.push(left.at(0));
+  c2.left.push(left.at(1));
+  c3.left.push(left.at(2));
+  c4.left.push(left.at(3));
+  c5.left.push(left.at(4));
+  c1.right.push(right.at(0));
+  c2.right.push(right.at(1));
+  c3.right.push(right.at(2));
+  c4.right.push(right.at(3));
+  c5.right.push(right.at(4));
+});
+
+c1.left.sort((a,b) => a - b);
+c2.left.sort((a,b) => a - b);
+c3.left.sort((a,b) => a - b);
+c4.left.sort((a,b) => a - b);
+c5.left.sort((a,b) => a - b);
+c1.right.sort((a,b) => a - b);
+c2.right.sort((a,b) => a - b);
+c3.right.sort((a,b) => a - b);
+c4.right.sort((a,b) => a - b);
+c5.right.sort((a,b) => a - b);
+
+let c1TotalDistance;
+let c2TotalDistance;
+let c3TotalDistance;
+let c4TotalDistance;
+let c5TotalDistance;
+
+for (let x = 0; x < 5; x++) {
+  const c1.left.at(x) -
+}
 
 /*
 inputArray.forEach((line) => {
