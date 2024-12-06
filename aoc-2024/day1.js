@@ -999,6 +999,8 @@ const input = `77442   88154
 59092   67571
 29363   98020`
 
+// PART 1
+
 const inputArray = input.split('\n');
 let totalDistance = 0;
 let debug = 0;
@@ -1020,6 +1022,7 @@ for (let x = 0; x < leftArray.length; x++) {
 
 console.log(totalDistance);
 
+// PART 2
 const leftUniques = [];
 const similarityScores = [];
 
@@ -1037,152 +1040,8 @@ leftUniques.forEach((left) => {
   similarityScores.push(score);
 });
 
-console.log(similarityScores);
 const totalScore = similarityScores.reduce((acc, curr) => acc + curr, 0);
 console.log(totalScore);
-
-/*
-const arrays = {
-  0: [],
-  1: [],
-  2: [],
-  3: [],
-  4: [],
-  5: [],
-  6: [],
-  7: [],
-  8: [],
-  9: [],
-};
-
-inputArray.forEach((line) => {
-  const lineOutput = line.split("   ").join("");
-  const lineOutputArray = lineOutput.split("");
-  let index = 0;
-  lineOutputArray.forEach((char) => {
-    arrays[index].push(char);
-    index++;
-  });
-});
-
-arrays[0].sort((a,b) => a - b);
-arrays[1].sort((a,b) => a - b);
-arrays[2].sort((a,b) => a - b);
-arrays[3].sort((a,b) => a - b);
-arrays[4].sort((a,b) => a - b);
-arrays[5].sort((a,b) => a - b);
-arrays[6].sort((a,b) => a - b);
-arrays[7].sort((a,b) => a - b);
-arrays[8].sort((a,b) => a - b);
-arrays[9].sort((a,b) => a - b);
-
-console.log(arrays);
-
-let zeroFiveTotal = 0;
-let oneSixTotal = 0;
-let twoSevenTotal = 0;
-let threeEightTotal = 0;
-let fourNineTotal = 0;
-
-for (let x = 0; x < arrays[0].length; x++) {
-  zeroFiveTotal = zeroFiveTotal + Math.abs(arrays[0][x] - arrays[5][x]);
-};
-for (let x = 0; x < arrays[1].length; x++) {
-  oneSixTotal = oneSixTotal + Math.abs(arrays[1][x] - arrays[6][x]);
-};
-for (let x = 0; x < arrays[2].length; x++) {
-  twoSevenTotal = twoSevenTotal + Math.abs(arrays[2][x] - arrays[7][x]);
-};
-for (let x = 0; x < arrays[3].length; x++) {
-  threeEightTotal = threeEightTotal + Math.abs(arrays[3][x] - arrays[8][x]);
-};
-for (let x = 0; x < arrays[4].length; x++) {
-  fourNineTotal = fourNineTotal + Math.abs(arrays[4][x] - arrays[9][x]);
-};
-
-totalDistance = zeroFiveTotal + oneSixTotal + twoSevenTotal + threeEightTotal + fourNineTotal;
-console.log(totalDistance);
-
-/*
-
-const c1 = {
-  left: [],
-  right: []
-}
-const c2 = {
-  left: [],
-  right: []
-}
-const c3 = {
-  left: [],
-  right: []
-}
-const c4 = {
-  left: [],
-  right:[]
-}
-const c5 = {
-  left: [],
-  right: []
-}
-
-inputArray.forEach((line) => {
-  const left = line.split("   ")[0].split("");
-  const right = line.split("   ")[1].split("");
-  c1.left.push(left.at(0));
-  c2.left.push(left.at(1));
-  c3.left.push(left.at(2));
-  c4.left.push(left.at(3));
-  c5.left.push(left.at(4));
-  c1.right.push(right.at(0));
-  c2.right.push(right.at(1));
-  c3.right.push(right.at(2));
-  c4.right.push(right.at(3));
-  c5.right.push(right.at(4));
-});
-
-c1.left.sort((a,b) => a - b);
-c2.left.sort((a,b) => a - b);
-c3.left.sort((a,b) => a - b);
-c4.left.sort((a,b) => a - b);
-c5.left.sort((a,b) => a - b);
-c1.right.sort((a,b) => a - b);
-c2.right.sort((a,b) => a - b);
-c3.right.sort((a,b) => a - b);
-c4.right.sort((a,b) => a - b);
-c5.right.sort((a,b) => a - b);
-
-let c1TotalDistance;
-let c2TotalDistance;
-let c3TotalDistance;
-let c4TotalDistance;
-let c5TotalDistance;
-
-for (let x = 0; x < 5; x++) {
-  const c1.left.at(x) -
-}
-
-/*
-inputArray.forEach((line) => {
-  console.log(line, totalDistance)
-  const left = line.split('   ')[0].split('').sort((a,b) => a - b);
-  const right = line.split('   ')[1].split('').sort((a,b) => a - b);
-  let lineTotal = 0;
-  
-  for (let x = 0; x < left.length; x++) {
-    const l = left[x];
-    const r = right[x];
-    const distance = Math.abs(l - r);
-    console.log(l, r, distance);
-    lineTotal = lineTotal + distance;
-  };
-  totalDistance = totalDistance + lineTotal;
-  debug++;
-})
-
-console.log(totalDistance, inputArray.length, debug);
-*/
-
 
 /*
 --- Day 1: Historian Hysteria ---
