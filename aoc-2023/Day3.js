@@ -431,7 +431,7 @@ for (let a = 0; a < schArray.length; a++) {
                 };
                 if (isValid) {
                     let zeroIndex = rowString.indexOf(numberValue[0],preValIndex-v);
-                    partNumberAndIndexArray.push([(+numberArray[na]), zeroIndex, a, numberArray[na].length]);
+                    partNumberAndIndexArray.push([(+numberArray[na]), zeroIndex, a, numberArray[na].length]); // value, index, row, length
                     isValid = false;
                     preValIndex = valueIndex + (numberValue.length - v);
                     v = numberValue.length;
@@ -514,7 +514,7 @@ for (let a = 0; a < partNumberAndIndexArray.length; a++) {
         if (indexTracker == 0) {
             partTwoRowEvalStringSliced = partTwoRowEvalString.slice(indexTracker, indexTracker+partEval[3]+1);
         } else {
-            partTwoRowEvalStringSliced = partTwoRowEvalString.slice(indexTracker-1, indexTracker+partEval[3]+1);
+            partTwoRowEvalStringSliced = partTwoRowEvalString.slice(indexTracker, indexTracker+partEval[3]);
         };
         if ((partTwoRowEvalStringSliced.indexOf("*") !== -1) && (partEval[2] == pa || partEval[2] == pa-1 || partEval[2] == pa+1)) {
             partNumbersWithStarNeighbors.push(partEval);
@@ -524,6 +524,7 @@ for (let a = 0; a < partNumberAndIndexArray.length; a++) {
     };
 };
 
+// find all "*" nodes and push them into a new array
 for (let a = 0; a < Object.keys(schDict).length; a++) {
     let node = schDict[a];
     let nodeVal = node["value"];
@@ -531,6 +532,8 @@ for (let a = 0; a < Object.keys(schDict).length; a++) {
         starNodesArray.push(node);
     };
 };
+
+// Go star by star and find all adjacent integers, and if there are only two integers, multiply them together and push them into a new array
 for (let b = 0; b < starNodesArray.length; b++) {
     let starEval = starNodesArray[b];
     let starNeighbors = starEval["neighbors"];
@@ -642,6 +645,8 @@ console.log(`Sum of all gear ratios is ${sumOfRatios}`);
 if (answer !== null) {
     console.log(`Example answer is ${answer} .`);
 };
+
+
 
 /*
 
