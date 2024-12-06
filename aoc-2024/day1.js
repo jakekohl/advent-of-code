@@ -1003,6 +1003,108 @@ const inputArray = input.split('\n');
 let totalDistance = 0;
 let debug = 0;
 
+const leftArray = [];
+const rightArray = [];
+
+inputArray.forEach((line) => {
+  leftArray.push(line.split("   ")[0]);
+  rightArray.push(line.split("   ")[1]);
+});
+
+leftArray.sort((a,b) => a - b);
+rightArray.sort((a,b) => a - b);
+
+for (let x = 0; x < leftArray.length; x++) {
+  totalDistance = totalDistance + Math.abs(leftArray[x] - rightArray[x]);
+};
+
+console.log(totalDistance);
+
+const leftUniques = [];
+const similarityScores = [];
+
+leftArray.forEach((left) => {
+  if (!leftUniques.includes(left)) {
+    leftUniques.push(left);
+  };
+});
+
+console.log(leftUniques);
+
+leftUniques.forEach((left) => {
+  const instances = rightArray.filter((right) => right === left).length;
+  const score = instances * left;
+  similarityScores.push(score);
+});
+
+console.log(similarityScores);
+const totalScore = similarityScores.reduce((acc, curr) => acc + curr, 0);
+console.log(totalScore);
+
+/*
+const arrays = {
+  0: [],
+  1: [],
+  2: [],
+  3: [],
+  4: [],
+  5: [],
+  6: [],
+  7: [],
+  8: [],
+  9: [],
+};
+
+inputArray.forEach((line) => {
+  const lineOutput = line.split("   ").join("");
+  const lineOutputArray = lineOutput.split("");
+  let index = 0;
+  lineOutputArray.forEach((char) => {
+    arrays[index].push(char);
+    index++;
+  });
+});
+
+arrays[0].sort((a,b) => a - b);
+arrays[1].sort((a,b) => a - b);
+arrays[2].sort((a,b) => a - b);
+arrays[3].sort((a,b) => a - b);
+arrays[4].sort((a,b) => a - b);
+arrays[5].sort((a,b) => a - b);
+arrays[6].sort((a,b) => a - b);
+arrays[7].sort((a,b) => a - b);
+arrays[8].sort((a,b) => a - b);
+arrays[9].sort((a,b) => a - b);
+
+console.log(arrays);
+
+let zeroFiveTotal = 0;
+let oneSixTotal = 0;
+let twoSevenTotal = 0;
+let threeEightTotal = 0;
+let fourNineTotal = 0;
+
+for (let x = 0; x < arrays[0].length; x++) {
+  zeroFiveTotal = zeroFiveTotal + Math.abs(arrays[0][x] - arrays[5][x]);
+};
+for (let x = 0; x < arrays[1].length; x++) {
+  oneSixTotal = oneSixTotal + Math.abs(arrays[1][x] - arrays[6][x]);
+};
+for (let x = 0; x < arrays[2].length; x++) {
+  twoSevenTotal = twoSevenTotal + Math.abs(arrays[2][x] - arrays[7][x]);
+};
+for (let x = 0; x < arrays[3].length; x++) {
+  threeEightTotal = threeEightTotal + Math.abs(arrays[3][x] - arrays[8][x]);
+};
+for (let x = 0; x < arrays[4].length; x++) {
+  fourNineTotal = fourNineTotal + Math.abs(arrays[4][x] - arrays[9][x]);
+};
+
+totalDistance = zeroFiveTotal + oneSixTotal + twoSevenTotal + threeEightTotal + fourNineTotal;
+console.log(totalDistance);
+
+/*
+
 const c1 = {
   left: [],
   right: []
