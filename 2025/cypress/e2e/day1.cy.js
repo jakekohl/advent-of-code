@@ -4,7 +4,6 @@ describe('Day 1', () => {
   let sampleInput;
   let puzzleInput;
   let count = 0;
-
   let currentValue = 50;
 
   before(() => {

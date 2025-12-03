@@ -1,1 +1,10 @@
+# Environment Variables
+.env*
+
+# Node
 node_modules
+
+# Cypress
+cypress/screenshots
+cypress/videos
+cypress/downloads
